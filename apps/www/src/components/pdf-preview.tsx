@@ -1,6 +1,6 @@
 import { usePDF } from '@react-pdf/renderer';
 import { AlertCircle, Download, ExternalLink, Minus, Plus } from 'lucide-react';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { type ReactNode, memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { cn } from '../lib/utils';
 import DropDown, { type DropDownOption } from './drop-down';
 
@@ -26,7 +26,9 @@ interface PDFPreviewProps<T = string> {
     options: DropDownOption<T>[];
     defaultValue: T;
     label?: string;
+    onChange?: (value: T) => void;
   };
+  toolbarContent?: ReactNode;
 }
 
 export const PDFPreview = memo(function PDFPreview<T = string>({
@@ -37,6 +39,7 @@ export const PDFPreview = memo(function PDFPreview<T = string>({
   showDownload = true,
   className,
   variants,
+  toolbarContent,
 }: PDFPreviewProps<T>) {
   const [selectedVariant, setSelectedVariant] = useState<T>(variants?.defaultValue as T);
   const [zoom, setZoom] = useState(getStoredZoom);
@@ -181,10 +184,16 @@ export const PDFPreview = memo(function PDFPreview<T = string>({
               <DropDown
                 options={variants.options}
                 value={selectedVariant}
-                onChange={(value) => setSelectedVariant(value as T)}
+                onChange={(value) => {
+                  const nextVariant = value as T;
+                  setSelectedVariant(nextVariant);
+                  variants.onChange?.(nextVariant);
+                }}
               />
             </div>
           )}
+
+          {toolbarContent}
 
           {/* Zoom controls */}
           <div className="flex items-center gap-1 border-l border-border pl-3">
