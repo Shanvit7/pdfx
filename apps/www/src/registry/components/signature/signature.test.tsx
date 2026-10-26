@@ -33,6 +33,23 @@ describe('PdfSignatureBlock', () => {
     expect(output).toContain('Person 3');
   });
 
+  it('uses explicit count instead of the number of provided signers', () => {
+    const output = collectText(
+      PdfSignatureBlock({
+        variant: 'double',
+        count: 2,
+        signers: [
+          { name: 'Person 1' },
+          { name: 'Person 2' },
+          { name: 'Person 3' },
+          { name: 'Person 4' },
+        ],
+      })
+    );
+
+    expect(output).toEqual(['Person 1', 'Person 2']);
+  });
+
   it('renders three signer places when count is 3', () => {
     const output = collectText(
       PdfSignatureBlock({
