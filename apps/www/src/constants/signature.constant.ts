@@ -74,7 +74,7 @@ export const signatureProps = [
     type: '2 | 3 | 4',
     defaultValue: 'signers.length or 2',
     description:
-      'Number of signature places in the double variant. Each extra signer appears on a new row after the first two.',
+      'Number of signature places in the double variant. Additional signers appear in a second row, with up to two signers per row.',
   },
   {
     name: 'signers',
